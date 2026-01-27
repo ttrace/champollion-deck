@@ -1,4 +1,4 @@
-# Ollama Translator (main.sh)
+# Local LLM Translator (main.sh)
 
 ローカルで動作する LLM 翻訳スクリプトです。  
 Ollama 上のモデルを使って、選択テキストやクリップボードの内容を **翻訳** します。
