@@ -6,6 +6,8 @@ Ollama 上のモデルを使って、選択テキストやクリップボード�
 
 MacOS の Automator（クイックアクション）と組み合わせることで、キーボードショートカットによる翻訳が可能になります。
 
+![local-translator](https://github.com/user-attachments/assets/f22bc9cf-1099-4183-8cd4-91f288a3e637)
+
 ---
 
 ## 特徴
