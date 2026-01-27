@@ -1,10 +1,12 @@
-# Ollama Translator (main.sh)
+# Local LLM Translator (main.sh)
 
 ローカルで動作する LLM 翻訳スクリプトです。  
 Ollama 上のモデルを使って、選択テキストやクリップボードの内容を **翻訳** します。
 右クリックからワンクリック翻訳 → 結果をクリップボード・通知・標準出力に返す、というフローを実現します。
 
-MacOS の Automator（クイックアクション）と組み合わせることで、  
+MacOS の Automator（クイックアクション）と組み合わせることで、キーボードショートカットによる翻訳が可能になります。
+
+![local-translator](https://github.com/user-attachments/assets/f22bc9cf-1099-4183-8cd4-91f288a3e637)
 
 ---
 
@@ -14,7 +16,7 @@ MacOS の Automator（クイックアクション）と組み合わせること�
 - ✅ **選択テキスト** or **クリップボード** を入力として利用
 - ✅ 結果は
   - クリップボードへコピー
-  - macOS 通知センターに表示
+  - TextEditで開く
   - 標準出力に返却（Automator から差し替え可能）
 - ✅ TTY（ターミナル実行）時は **デバッグモード** 自動オン
   - ログファイル出力
