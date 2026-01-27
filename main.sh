@@ -1,7 +1,7 @@
 #!/bin/zsh
 set -euo pipefail
 
-LCMODEL="${LCMODEL:-hoangquan456/qwen3-nothink:8b}"   # 環境変数でモデル切替OK (例: LCMODEL=llama3)
+LCMODEL="${LCMODEL:-translategemma:4b}"   # 環境変数でモデル切替OK (例: LCMODEL=llama3)
 # LCMODEL="hoangquan456/qwen3-nothink:8b" # 環境変数を使わない場合はこの行を有効化して任意のモデルを指定
 
 # Enable debug when run from a terminal (TTY). If stdout is a TTY then enable DEBUG=1.
