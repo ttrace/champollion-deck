@@ -1,1 +1,1 @@
-{"main":{"identifier":"main","description":"Main window permissions for development.","local":true,"windows":["main"],"permissions":["core:event:default","core:event:allow-listen","core:event:allow-emit","core:event:allow-emit-to","core:event:allow-unlisten"]}}
+{"main":{"identifier":"main","description":"Main window permissions for development.","local":true,"windows":["main"],"permissions":["core:app:allow-version","core:event:default","core:event:allow-listen","core:event:allow-emit","core:event:allow-emit-to","core:event:allow-unlisten"]}}

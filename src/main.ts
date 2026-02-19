@@ -1,6 +1,7 @@
 import "./style.css";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
+import { getVersion } from "@tauri-apps/api/app";
 
 const sourceEl = document.querySelector<HTMLTextAreaElement>("#source")!;
 const resultEl = document.querySelector<HTMLPreElement>("#result")!;
@@ -9,6 +10,7 @@ const modelEl = document.querySelector<HTMLInputElement>("#model")!;
 const modelPopoverEl = document.querySelector<HTMLDivElement>("#model-popover")!;
 const modelToggleBtn = document.querySelector<HTMLButtonElement>("#model-toggle")!;
 const modelPanelEl = document.querySelector<HTMLDivElement>("#model-panel")!;
+const appVersionEl = document.querySelector<HTMLSpanElement>("#app-version")!;
 const translateBtn = document.querySelector<HTMLButtonElement>("#translate")!;
 const stopBtn = document.querySelector<HTMLButtonElement>("#stop")!;
 const copyBtn = document.querySelector<HTMLButtonElement>("#copy")!;
@@ -180,11 +182,20 @@ function clearSource() {
   setStatus("Cleared.");
 }
 
+async function setAppVersion() {
+  try {
+    appVersionEl.textContent = await getVersion();
+  } catch {
+    appVersionEl.textContent = "dev";
+  }
+}
+
 
 modelEl.value = getModel();
 setModelPanelOpen(false);
 setRunning(false);
 setStatus("Ready.");
+void setAppVersion();
 
 void setupListeners().then(async () => {
   try {
