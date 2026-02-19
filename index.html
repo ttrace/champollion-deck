@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Champollion Deck</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app" class="app">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Local LLM Translator</p>
+          <h1>Champollion Deck</h1>
+        </div>
+        <div class="model-popover" id="model-popover">
+          <button
+            id="model-toggle"
+            class="icon-button"
+            type="button"
+            aria-label="Open model settings"
+            aria-controls="model-panel"
+            aria-expanded="false"
+          >
+            <img src="/icons/gear.svg" alt="" aria-hidden="true" />
+          </button>
+          <div id="model-panel" class="model-panel" hidden>
+            <label for="model">Ollama Model</label>
+            <input id="model" type="text" placeholder="translategemma:4b" />
+          </div>
+        </div>
+      </header>
+
+      <main class="grid">
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Source</h2>
+            <div class="actions">
+              <button id="paste" class="ghost">Paste</button>
+              <button id="clear" class="ghost">Clear</button>
+            </div>
+          </div>
+          <textarea id="source" placeholder="ここに翻訳したいテキストを貼り付け"></textarea>
+        </section>
+
+        <section class="panel output">
+          <div class="panel-head">
+            <h2>Stream Output</h2>
+            <div class="actions">
+              <button id="copy" class="ghost">Copy</button>
+              <button id="stop" class="ghost">Stop</button>
+              <button id="translate" class="primary">Translate</button>
+            </div>
+          </div>
+          <pre id="result" class="result"></pre>
+          <div class="status" id="status">Ready.</div>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

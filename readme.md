@@ -1,259 +1,123 @@
-# Local LLM Translator (main.sh)
+# Champollion Deck (Tauri App)
 
-ローカルで動作する LLM 翻訳スクリプトです。  
-Ollama 上のモデルを使って、選択テキストやクリップボードの内容を **翻訳** します。
-右クリックからワンクリック翻訳 → 結果をクリップボード・通知・標準出力に返す、というフローを実現します。
-
-MacOS の Automator（クイックアクション）と組み合わせることで、キーボードショートカットによる翻訳が可能になります。
-
-![local-translator](https://github.com/user-attachments/assets/f22bc9cf-1099-4183-8cd4-91f288a3e637)
+Ollama を使ったローカル翻訳アプリです。Tauri の UI でストリーム出力を確認できます。
+Automator から選択テキストを渡して自動翻訳する運用もできます。
 
 ---
 
 ## 特徴
 
-- ✅ Ollama を使った **ローカル LLM 翻訳**
-- ✅ **選択テキスト** or **クリップボード** を入力として利用
-- ✅ 結果は
-  - クリップボードへコピー
-  - TextEditで開く
-  - 標準出力に返却（Automator から差し替え可能）
-- ✅ TTY（ターミナル実行）時は **デバッグモード** 自動オン
-  - ログファイル出力
-  - `set -x` によるコマンドトレース
+- ✅ Ollama を使ったローカル翻訳
+- ✅ ストリーム出力をリアルタイム表示
+- ✅ Model を UI で切り替え可能
+- ✅ Automator から選択テキストを引数で渡して自動翻訳
 
 ---
 
 ## 動作要件
 
 - macOS
-- `zsh`
-- [Ollama](https://ollama.ai/) がインストール済みで、以下のいずれかに存在すること
-  - `/usr/local/bin/ollama`
-  - `/opt/homebrew/bin/ollama`
-- macOS 標準コマンドが使用可能であること
-  - `pbpaste` / `pbcopy`
-  - `osascript`（通知表示に使用）
-  - `tee`
+- Node.js (npm)
+- Rust (cargo)
+- Tauri CLI
+- Ollama
+  - `/usr/local/bin/ollama` または `/opt/homebrew/bin/ollama`
 
 ---
 
-## インストール
-
-1. このリポジトリをクローン、または `main.sh` を任意のディレクトリに配置します。
-2. 実行権限を付与します。
+## 開発起動
 
 ```bash
-chmod +x main.sh
+npm install
+npm run tauri dev
 ```
 
 ---
 
-## モデル設定
-
-スクリプト内で使用するモデルは、`main.sh` のこの行で指定されています。
+## ビルド
 
 ```bash
-MODEL="hoangquan456/qwen3-nothink:8b"
+npm run tauri build
 ```
 
-別のモデルを使いたい場合は、この行を任意の Ollama モデル名に書き換えてください。
-
-例:
-
-```bash
-MODEL="llama3"
-# または
-MODEL="qwen2.5:14b"
-```
-
-> 補足:  
-> `MODEL` を環境変数で切り替えるための行もコメントとして残っていますが、  
-> 現在は固定値の `MODEL="..."` が有効になっています。
-
----
-
-## 翻訳プロンプト
-
-スクリプト内のプロンプトは以下のようになっています。
-
-```bash
-PROMPT=$'You are a professional translator.\n- Translate the following text into Japanese.\n- Keep tone and nuance.\nDo not add explanations.\n---\n'"$SRC_TEXT"
-```
-
-- 役割: プロ翻訳者
-- 指示:
-  - 指定されたテキストを **日本語に翻訳**
-  - トーン・ニュアンスを保持
-  - **説明文を追加しない**
-
-他言語への翻訳やスタイル変更をしたい場合は、この部分を書き換えてください。
+`.app` は `src-tauri/target/release/bundle/macos/` に生成されます。
 
 ---
 
 ## 使い方
 
-### 1. Automator（クイックアクション）から使う
+- `Source` に翻訳したいテキストを入力
+- `Translate` でストリーム出力開始
+- `Stop` でキャンセル
+- `Copy` で出力をクリップボードへ
+- `Model` 欄で Ollama モデル名を切り替え可能（例: `llama3`）
 
-Automator の「サービス」/「クイックアクション」と組み合わせることで、  
-テキスト選択 → 右クリック → 翻訳 → クリップボード・通知に結果、というフローが可能です。
+---
 
-1. **Automator** を起動し、「クイックアクション」を新規作成
-2. 「ワークフローが受け取る現在の項目」を  
-   - `テキスト`  
-   - 任意のアプリケーション（例: すべてのアプリケーション）  
-   に設定
-3. アクション一覧から「シェルスクリプトを実行」を追加
-4. 設定:
-   - シェル: `/bin/zsh`
-   - 入力の引き渡し方法: `標準入力`
-5. スクリプト欄に `main.sh` を呼び出すように記述
+## Automator から使う
+
+「クイックアクション」経由で選択テキストを引数として渡します。
+既にアプリが起動中の場合でも引数が確実に渡るように `open -na` を使います。
+
+1. Automator を開き、「クイックアクション」を新規作成
+2. 「ワークフローが受け取る現在の項目」を `テキスト` に設定
+3. 「シェルスクリプトを実行」アクションを追加
+4. シェル: `/bin/zsh`
+5. 入力の引き渡し: `引数`
+6. スクリプト欄に以下を記述
 
 ```bash
-/フル/パス/への/main.sh
+INPUT="$*"
+open -na "/Applications/Champollion Deck.app" --args "$INPUT"
 ```
 
-6. クイックアクションに「Ollama 翻訳」などの名前を付けて保存
-
-これで、テキストを選択 → 右クリック → サービス/クイックアクション → 「Ollama 翻訳」で  
-選択テキストが翻訳されます。
-
-**Automator からの動作:**
-
-- 選択テキストは **標準入力** として `main.sh` に渡されます
-- スクリプト内では `cat` で読み取り、Ollama にプロンプトとして送信
-- 翻訳結果:
-  - クリップボードにコピー (`pbcopy`)
-  - 通知センターで表示 (`osascript`)
-  - 標準出力に返却（アプリによってはそのまま差し替え）
+注意:
+- `.app` のパスは実際の配置場所に合わせて変更してください
+- 引数が渡された場合、アプリは自動で翻訳を開始します
 
 ---
 
-### 2. ターミナルから使う
+## 補足
 
-ターミナル（TTY）から実行した場合は、以下の優先順位で入力を解釈します。
-
-1. **引数がある場合**: 引数全体を翻訳対象テキストとして扱う
-2. **引数がない場合**: クリップボードの内容（`pbpaste`）を翻訳対象にする
-
-#### 引数から翻訳
-
-```bash
-./main.sh "Hello, how are you?"
-```
-
-#### クリップボードの内容を翻訳
-
-```bash
-# まずコピー
-pbcopy < some_text.txt
-
-# その後 main.sh を実行
-./main.sh
-```
-
-> 補足:  
-> ターミナルから実行した場合は「TTY」と判定され、  
-> 自動的にデバッグモード（後述）が有効になります。
+- デフォルトモデル: `translategemma:4b`
+- Ollama のパスは以下を優先して探索します
+  - `/usr/local/bin/ollama`
+  - `/opt/homebrew/bin/ollama`
+  - それ以外は `PATH` から `ollama`
 
 ---
 
-## デバッグモード
+## ディレクトリ構成
 
-標準出力が TTY（ターミナル）である場合、自動的にデバッグモードになります。
+- `src-tauri/`
+- `src/`
+- `index.html`
+- `vite.config.ts`
+- `package.json`
+- `main.sh`
+- `readme.md`
+- `Agent.md`
 
-```bash
-if [ -t 1 ]; then
-  DEBUG=1
-else
-  DEBUG=${DEBUG:-0}
-fi
-```
-
-`DEBUG=1` のとき:
-
-- `LOGFILE`（デフォルト `/tmp/ollama_main_debug.log`）にログを追記
-- `set -x` により実行コマンドがトレースされる
-- 標準出力・標準エラーが `tee` でターミナルとログ両方に出力される
-
-ログファイルのパスは `LOGFILE` 環境変数で変更できます。
-
-```bash
-LOGFILE=/tmp/my_ollama_debug.log ./main.sh "Test"
-```
+概要:
+- `src-tauri/`: Tauri（Rust）側。Ollama 実行、ストリーム送信、引数受け取りを担当
+- `src/`: フロントエンド（TS/CSS）。UI とイベント受信、表示制御
+- `index.html`: UI の HTML
+- `vite.config.ts`: Vite のビルド設定
+- `package.json`: フロントエンド依存と scripts
+- `main.sh`: 旧スクリプト版（参考）
+- `readme.md`: 使い方と Automator 連携の説明
+- `Agent.md`: 次回開発の手順メモ
 
 ---
 
-## 環境変数・設定
+## 旧スクリプト版（参考）
 
-- `DEBUG`
-  - TTY の場合は自動的に `1` になります
-  - 非 TTY（Automator など）では、明示的に指定しない限り `0`
-- `LOGFILE`
-  - デバッグモード時のログ出力先  
-  - デフォルト: `/tmp/ollama_main_debug.log`
-- `MODEL`
-  - 現状はスクリプト内で直接指定（`MODEL="..."`）  
-  - 任意の Ollama モデルに書き換えてください
-
----
-
-## エラーハンドリング
-
-### 入力テキストが空の場合
-
-Automator などから呼び出された際に入力が空だった場合:
-
-- macOS 通知: `選択テキストが空です`
-- 終了コード: `1`
-
-### Ollama 実行に失敗した場合
-
-`/usr/local/bin/ollama` と `/opt/homebrew/bin/ollama` の両方で失敗した場合:
-
-- macOS 通知: `Ollama 実行に失敗しました`
-- 終了コード: `2`
-
----
-
-## 処理の流れ（概要）
-
-1. **TTY 判定**
-   - TTY なら `DEBUG=1` & ログ設定
-2. **入力取得**
-   - TTY:
-     - 引数があれば引数を使用
-     - ない場合はクリップボード（`pbpaste`）
-   - 非 TTY:
-     - 標準入力（Automator からの選択テキスト）
-3. **入力チェック**
-   - 空なら通知を出し、終了コード `1` で終了
-4. **プロンプト生成**
-   - 英語のシステムプロンプト + 区切り線 `---` + 入力テキスト
-5. **Ollama 実行**
-   - `/usr/local/bin/ollama` → ダメなら `/opt/homebrew/bin/ollama` を順に試行
-6. **結果処理**
-   - 結果が空なら通知 + 終了コード `2`
-   - それ以外:
-     - クリップボードへコピー
-     - 通知センターに結果を表示
-     - 標準出力に結果を出力
-
----
-
-## カスタマイズのヒント
-
-- 翻訳先言語を変えたい場合
-  - `PROMPT` 内の「Translate the following text into Japanese.」部分を書き換える
-- 説明付き翻訳にしたい場合
-  - `Do not add explanations.` を削除 or 別の指示文へ変更
-- 通知を出したくない場合
-  - `osascript -e ...` の行をコメントアウト
+`main.sh` は従来の Automator 用シェルスクリプトです。現在はアプリ版がメインです。
+必要であれば `main.sh` を使ったフローも引き続き利用できます。
 
 ---
 
 ## ライセンス / モデル利用について
 
 - MIT
-- 使用するモデル（例: `hoangquan456/qwen3-nothink:8b`）は、それぞれのライセンス・利用規約に従ってください。  
-  商用利用・再配布等の条件は各モデルの提供元の規約を確認してください。
+- 使用するモデルのライセンス・利用規約に従ってください

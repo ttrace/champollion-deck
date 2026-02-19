@@ -35,7 +35,7 @@ else
 fi
 
 if [[ -z "$SRC_TEXT" ]]; then
-  osascript -e 'display notification "選択テキストが空です" with title "Ollama Translator"'
+  osascript -e 'display notification "選択テキストが空です" with title "Champollion Deck"'
   exit 1
 fi
 
@@ -49,7 +49,7 @@ if [[ -z "$RESULT" && -x /opt/homebrew/bin/ollama ]]; then
 fi
 
 if [[ -z "$RESULT" ]]; then
-  osascript -e 'display notification "Ollama 実行に失敗しました" with title "Ollama Translator"'
+  osascript -e 'display notification "Ollama 実行に失敗しました" with title "Champollion Deck"'
   exit 2
 fi
 
