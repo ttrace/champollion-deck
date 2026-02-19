@@ -1,7 +1,10 @@
 # Champollion Deck (Tauri App)
 
-Ollama を使ったローカル翻訳アプリです。Tauri の UI でストリーム出力を確認できます。
-Automator から選択テキストを渡して自動翻訳する運用もできます。
+Ollama を使ったMac用のローカル翻訳アプリです。
+
+通信環境の整わない場所でもtranslategemma:4bをはじめとする翻訳に適したローカルLLMを用いて、多言語翻訳を行うことができます。Automatorのクイックアクションに登録することで、アプリケーションで選択したテキストを翻訳することも可能です。
+
+![Champollion Deck Screenshot](docs/champollion-deck-screenshot.png)
 
 ---
 
@@ -10,7 +13,7 @@ Automator から選択テキストを渡して自動翻訳する運用もでき�
 - ✅ Ollama を使ったローカル翻訳
 - ✅ ストリーム出力をリアルタイム表示
 - ✅ Model を UI で切り替え可能
-- ✅ Automator から選択テキストを引数で渡して自動翻訳
+- ✅ Automator のクイックアクションから選択テキストを引数で渡して自動翻訳
 
 ---
 
