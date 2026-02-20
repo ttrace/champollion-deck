@@ -118,6 +118,10 @@ h1 {
   margin-bottom: 8px;
 }
 
+.model-panel label + input + label {
+  margin-top: 12px;
+}
+
 .model-panel input {
   width: 100%;
   border: 1px solid var(--line);

@@ -7,6 +7,7 @@ const sourceEl = document.querySelector<HTMLTextAreaElement>("#source")!;
 const resultEl = document.querySelector<HTMLPreElement>("#result")!;
 const statusEl = document.querySelector<HTMLDivElement>("#status")!;
 const modelEl = document.querySelector<HTMLInputElement>("#model")!;
+const targetLanguageEl = document.querySelector<HTMLInputElement>("#target-language")!;
 const modelPopoverEl = document.querySelector<HTMLDivElement>("#model-popover")!;
 const modelToggleBtn = document.querySelector<HTMLButtonElement>("#model-toggle")!;
 const modelPanelEl = document.querySelector<HTMLDivElement>("#model-panel")!;
@@ -19,6 +20,8 @@ const clearBtn = document.querySelector<HTMLButtonElement>("#clear")!;
 
 const MODEL_KEY = "ollama-translator-model";
 const DEFAULT_MODEL = "translategemma:4b";
+const TARGET_LANGUAGE_KEY = "ollama-translator-target-language";
+const DEFAULT_TARGET_LANGUAGE = "Japanese";
 
 let running = false;
 let unsubscribeChunk: (() => void) | null = null;
@@ -110,6 +113,15 @@ function setModel(value: string) {
   localStorage.setItem(MODEL_KEY, value.trim());
 }
 
+function getTargetLanguage() {
+  const saved = localStorage.getItem(TARGET_LANGUAGE_KEY);
+  return saved?.trim() || DEFAULT_TARGET_LANGUAGE;
+}
+
+function setTargetLanguage(value: string) {
+  localStorage.setItem(TARGET_LANGUAGE_KEY, value.trim());
+}
+
 function setModelPanelOpen(open: boolean) {
   modelPanelEl.hidden = !open;
   modelToggleBtn.setAttribute("aria-expanded", String(open));
@@ -139,13 +151,15 @@ async function translate() {
   }
 
   const model = modelEl.value.trim() || DEFAULT_MODEL;
+  const targetLanguage = targetLanguageEl.value.trim() || DEFAULT_TARGET_LANGUAGE;
   setModel(model);
+  setTargetLanguage(targetLanguage);
 
   cleanupListeners();
   await setupListeners();
 
   try {
-    await invoke("translate_stream", { text, model });
+    await invoke("translate_stream", { text, model, targetLanguage });
   } catch (error) {
     setRunning(false);
     setStatus(`Error: ${String(error)}`);
@@ -192,6 +206,7 @@ async function setAppVersion() {
 
 
 modelEl.value = getModel();
+targetLanguageEl.value = getTargetLanguage();
 setModelPanelOpen(false);
 setRunning(false);
 setStatus("Ready.");
