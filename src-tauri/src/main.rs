@@ -9,6 +9,7 @@ use tokio::process::Command;
 use tokio::sync::watch;
 
 const DEFAULT_MODEL: &str = "translategemma:4b";
+const DEFAULT_TARGET_LANGUAGE: &str = "Japanese";
 const LOG_EVENT: &str = "ollama://log";
 const INPUT_EVENT: &str = "ollama://input";
 
@@ -63,10 +64,10 @@ struct ErrorPayload {
   message: String,
 }
 
-fn build_prompt(text: &str) -> String {
+fn build_prompt(text: &str, target_language: &str) -> String {
   let mut prompt = format!(
-    "You are a professional translator.\n- Translate the following text into Japanese.\n- Output must be Japanese only.\n- Keep tone and nuance.\n- Do not add explanations.\n---\n{}",
-    text
+    "You are a professional translator.\n- Translate the following text into {}.\n- Output must be {} only.\n- Keep tone and nuance.\n- Do not add explanations.\n---\n{}",
+    target_language, target_language, text
   );
   prompt.push('\n');
   prompt
@@ -113,6 +114,7 @@ async fn translate_stream(
   state: State<'_, AppState>,
   text: String,
   model: Option<String>,
+  target_language: Option<String>,
 ) -> Result<(), String> {
   if text.trim().is_empty() {
     return Err("source text is empty".into());
@@ -123,11 +125,21 @@ async fn translate_stream(
   }
 
   let model = model.unwrap_or_else(|| DEFAULT_MODEL.to_string());
-  let prompt = build_prompt(&text);
+  let target_language = target_language
+    .map(|value| value.trim().to_string())
+    .filter(|value| !value.is_empty())
+    .unwrap_or_else(|| DEFAULT_TARGET_LANGUAGE.to_string());
+  let prompt = build_prompt(&text, &target_language);
   let cmd_path = resolve_ollama_path();
   emit_log(
     &window,
-    format!("start: cmd={} model={} prompt_bytes={}", cmd_path, model, prompt.len()),
+    format!(
+      "start: cmd={} model={} target_language={} prompt_bytes={}",
+      cmd_path,
+      model,
+      target_language,
+      prompt.len()
+    ),
   );
 
   let (tx, rx) = watch::channel(false);
