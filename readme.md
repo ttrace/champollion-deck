@@ -28,25 +28,6 @@ Ollama を使ったMac用のローカル翻訳アプリです。
 
 ---
 
-## 開発起動
-
-```bash
-npm install
-npm run tauri dev
-```
-
----
-
-## ビルド
-
-```bash
-npm run tauri build
-```
-
-`.app` は `src-tauri/target/release/bundle/macos/` に生成されます。
-
----
-
 ## 使い方
 
 - `Source` に翻訳したいテキストを入力
@@ -55,7 +36,7 @@ npm run tauri build
 - `Copy` で出力をクリップボードへ
 - 右上ギアの設定パネルで以下を変更可能
   - `Ollama Model`（例: `llama3`）
-  - `Target Language`（例: `Japanese`, `English`, `French`）
+  - `Target Language`（自然言語で記入できます 例: `Japanese`, `English`, `英語`, `French`, `中国語（簡体）`, `Simplified Chinese`）
 
 ---
 
@@ -79,6 +60,26 @@ open -na "/Applications/Champollion Deck.app" --args "$INPUT"
 注意:
 - `.app` のパスは実際の配置場所に合わせて変更してください
 - 引数が渡された場合、アプリは自動で翻訳を開始します
+
+---
+
+
+## 開発起動
+
+```bash
+npm install
+npm run tauri dev
+```
+
+---
+
+## ビルド
+
+```bash
+npm run tauri build
+```
+
+`.app` は `src-tauri/target/release/bundle/macos/` に生成されます。
 
 ---
 
