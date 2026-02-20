@@ -12,7 +12,7 @@ Ollama を使ったMac用のローカル翻訳アプリです。
 
 - ✅ Ollama を使ったローカル翻訳
 - ✅ ストリーム出力をリアルタイム表示
-- ✅ Model を UI で切り替え可能
+- ✅ Model / 翻訳先言語を UI で切り替え可能
 - ✅ Automator のクイックアクションから選択テキストを引数で渡して自動翻訳
 
 ---
@@ -53,7 +53,9 @@ npm run tauri build
 - `Translate` でストリーム出力開始
 - `Stop` でキャンセル
 - `Copy` で出力をクリップボードへ
-- `Model` 欄で Ollama モデル名を切り替え可能（例: `llama3`）
+- 右上ギアの設定パネルで以下を変更可能
+  - `Ollama Model`（例: `llama3`）
+  - `Target Language`（例: `Japanese`, `English`, `French`）
 
 ---
 
