@@ -8,6 +8,13 @@
 - フロントエンド: `src/`, `index.html`, `vite.config.ts`
 - Automator 連携: README のスクリプト参照
 - 旧スクリプト: `main.sh`
+- 非公開ファイル置き場: `private/`（証明書・鍵・配布用書類）
+
+## 非公開フォルダ運用
+
+- `private/` には `.cer` などの機密ファイルを配置する
+- `private/` と証明書拡張子は `.gitignore` で除外済み
+- 機密情報は README やコミットメッセージに記載しない
 
 ## よく使うコマンド
 

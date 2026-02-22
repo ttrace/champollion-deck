@@ -21,6 +21,14 @@ pnpm-debug.log*
 .env.local
 .env.*.local
 
+# Private documents / certificates
+private/
+*.cer
+*.crt
+*.p12
+*.pfx
+*.mobileprovision
+
 # IDE
 .vscode/
 .idea/

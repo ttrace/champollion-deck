@@ -1,5 +1,7 @@
 # Champollion Deck (Tauri App)
 
+<img src="public/icons/app-icon.png" alt="Champollion Deck App Icon" width="128" />
+
 Ollama を使ったMac用のローカル翻訳アプリです。
 
 通信環境の整わない場所でもtranslategemma:4bをはじめとする翻訳に適したローカルLLMを用いて、多言語翻訳を行うことができます。Automatorのクイックアクションに登録することで、アプリケーションで選択したテキストを翻訳することも可能です。
