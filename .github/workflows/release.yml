@@ -48,3 +48,5 @@ jobs:
           releaseBody: アプリケーション署名を施し、一般的な環境でインストールできるようになりました。
           releaseDraft: false
           prerelease: false
+          args: --bundles dmg
+
