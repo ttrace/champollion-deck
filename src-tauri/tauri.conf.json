@@ -29,6 +29,7 @@
   },
   "bundle": {
     "active": true,
+    "targets": ["app", "dmg"],
     "macOS": {
       "signingIdentity": "Developer ID Application: Taiyo Fujii (ZLQNS38K47)",
       "hardenedRuntime": true
