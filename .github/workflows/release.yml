@@ -2,8 +2,8 @@ name: Release Build
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - "v*"
 
 concurrency:
   group: release-${{ github.ref }}
@@ -81,4 +81,3 @@ jobs:
 
           # Upload (overwrite if already present)
           gh release upload "$TAG" "$DMG_PATH" --clobber
-
