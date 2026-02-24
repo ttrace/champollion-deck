@@ -1,13 +1,14 @@
 {
   "name": "ollama-translator-app",
   "private": true,
-  "version": "1.2.0",
+  "version": "1.2.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "tauri:build:dmg:no-notarize": "env -u APPLE_ID -u APPLE_PASSWORD -u APPLE_TEAM_ID -u APPLE_API_KEY -u APPLE_API_ISSUER -u APPLE_API_KEY_PATH tauri build --bundles dmg"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.0.0",
