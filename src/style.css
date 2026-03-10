@@ -15,6 +15,12 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -32,6 +38,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 32px;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .hero {
@@ -135,6 +143,8 @@ h1 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
+  flex: 1;
+  min-height: 0;
 }
 
 .panel {
@@ -146,7 +156,7 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  min-height: 380px;
+  min-height: 0;
 }
 
 .panel-head {
@@ -216,6 +226,10 @@ textarea {
 .status {
   font-size: 12px;
   color: var(--sage);
+  max-height: 8rem;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 @media (max-width: 900px) {
