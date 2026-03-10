@@ -32,3 +32,6 @@ private/
 # IDE
 .vscode/
 .idea/
+
+# Lock / temp artifacts
+*~lock~
